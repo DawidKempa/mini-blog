@@ -1,0 +1,13 @@
+<% content_for :title, "Edytuj komentarz" %>
+
+<h1>Edytuj komentarz</h1>
+
+<%= form_with(model: [:admin, @comment], local: true) do |f| %>
+  <div class="mb-3">
+    <%= f.label :content, "Treść komentarza" %>
+    <%= f.text_area :content, class: "form-control", rows: 5, required: true %>
+  </div>
+
+  <%= f.submit "Zapisz zmiany", class: "btn btn-primary" %>
+  <%= link_to "Anuluj", admin_comments_path, class: "btn btn-secondary ms-2" %>
+<% end %>

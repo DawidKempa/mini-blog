@@ -1,0 +1,15 @@
+<div class="container mt-4">
+  <h1 class="mb-4">Strony</h1>
+  
+  <div class="list-group">
+    <% @pages.each do |page| %>
+      <%= link_to page_path(page.full_path), class: "list-group-item list-group-item-action" do %>
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1"><%= page.title %></h5>
+          <small><%= page.updated_at.strftime("%d.%m.%Y") %></small>
+        </div>
+        <p class="mb-1"><%= truncate(strip_tags(page.content.to_s), length: 100) %></p>
+      <% end %>
+    <% end %>
+  </div>
+</div>

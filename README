@@ -1,0 +1,19 @@
+## 🚀 Jak uruchomić projekt?
+
+### 1. Zbuduj kontenery
+
+W terminalu uruchom:
+
+```bash
+docker-compose build
+```
+
+### 2. Uruchom aplikację
+
+```bash
+docker-compose up
+```
+
+### 3. Wejdź w przeglądarkę
+
+http://localhost:3000

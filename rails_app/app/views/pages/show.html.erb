@@ -1,0 +1,28 @@
+<div class="container mt-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <% if @page.parent %>
+        <li class="breadcrumb-item"><%= link_to @page.parent.title, page_path(@page.parent.full_path) %></li>
+      <% end %>
+      <li class="breadcrumb-item active" aria-current="page"><%= @page.title %></li>
+    </ol>
+  </nav>
+
+  <article>
+    <h1><%= @page.title %></h1>
+    <div class="content mt-4">
+      <%= @page.content %>
+    </div>
+
+    <% if @page.children.any? %>
+      <div class="mt-5">
+        <h3>Podstrony</h3>
+        <div class="list-group">
+          <% @page.children.published.order(:position).each do |child| %>
+            <%= link_to child.title, page_path(child.full_path), class: "list-group-item list-group-item-action" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </article>
+</div>

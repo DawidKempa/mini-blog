@@ -1,0 +1,16 @@
+<% content_for :title, "Szczegóły użytkownika ##{@user.id}" %>
+
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title mb-0">Użytkownik #<%= @user.id %></h5>
+  </div>
+  <div class="card-body">
+    <p><strong>Email:</strong> <%= @user.email %></p>
+    <p><strong>Rola:</strong> <%= @user.role %></p>
+    <p><strong>Data rejestracji:</strong> <%= l @user.created_at, format: :long %></p>
+  </div>
+  <div class="card-footer">
+    <%= link_to 'Edytuj', edit_admin_user_path(@user), class: "btn btn-secondary" %>
+    <%= link_to 'Powrót', admin_users_path, class: "btn btn-outline-secondary" %>
+  </div>
+</div>

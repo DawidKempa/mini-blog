@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  slug: MyString
+  content: MyText
+  parent: one
+  user: one
+  published: false
+  position: 1
+
+two:
+  title: MyString
+  slug: MyString
+  content: MyText
+  parent: two
+  user: two
+  published: false
+  position: 1

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "App" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+
+    <style>
+      .sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+        box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+      }
+      .sidebar .nav-link {
+        font-weight: 500;
+        color: #333;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+      }
+      .sidebar .nav-link.active {
+        color: #0d6efd;
+        background-color: rgba(13, 110, 253, 0.1);
+      }
+      .sidebar .nav-link:hover:not(.active) {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+      .sidebar-heading {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        
+          <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <div class="position-sticky pt-3">
+              <h5 class="sidebar-heading px-3 mb-3">Menu</h5>
+              <ul class="nav flex-column">
+                <li class="nav-item">
+                  <%= link_to "Aktualności", aktualnosci_posts_path, class: "nav-link" %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to "Strony", pages_path, class: "nav-link" %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to "Posty", posts_path, class: "nav-link" %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to "Kontakt", contact_form_index_path, class: "nav-link" %>
+                </li>
+                <li class="nav-item">
+                  <%= button_to "Wyloguj się", destroy_user_session_path, method: :delete, class: "nav-link" %>
+                </li>
+              </ul>
+
+              <% if content_for?(:sidebar_stats) %>
+                <%= yield :sidebar_stats %>
+              <% else %>
+                <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">Statystyki</h6>
+                <ul class="nav flex-column mb-2">
+                  <li class="nav-item">
+                    <% if Post.last.present? %>
+                      <span class="nav-link">Ostatni post: <%= time_ago_in_words(Post.last.created_at) %> temu</span>
+                    <% else %>
+                      <span class="nav-link">Brak postów</span>
+                    <% end %>
+                  </li>
+                </ul>
+              <% end %>
+            </div>
+          </div>
+        
+
+        <!-- Główna zawartość - odpowiednio dostosowana szerokość w zależności od tego czy sidebar jest widoczny -->
+        <main class="<%= current_user&.admin? ? 'col-12' : 'col-md-9 col-lg-10' %> px-md-4">
+          <%= render 'shared/flash' %>
+          <%= yield %>
+        </main>
+      </div>
+    </div>
+
+    <% if flash[:alert] %>
+      <div style="position: fixed; top: 20px; right: 20px; padding: 15px; background: #ff4444; color: white; border-radius: 5px; z-index: 1000;">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+  </body>
+</html>

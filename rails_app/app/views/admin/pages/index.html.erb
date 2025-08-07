@@ -1,0 +1,30 @@
+<h1>Zarządzanie stronami</h1>
+
+<%= link_to 'Nowa strona', new_admin_page_path, class: 'btn btn-primary' %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Pozycja</th>
+      <th>Tytuł</th>
+      <th>Ścieżka</th>
+      <th>Status</th>
+      <th>Akcje</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @pages.each do |page| %>
+      <tr>
+        <td><%= page.position %></td>
+        <td><%= page.title %></td>
+        <td><%= page.full_path %></td>
+        <td><%= page.published? ? 'Opublikowany' : 'Szkic' %></td>
+        <td>
+          <%= link_to 'Pokaż', admin_page_show_path(page.full_path) %>
+          <%= link_to 'Edytuj', edit_admin_page_path(page.id) %>
+          <%= button_to 'Usuń', admin_page_path(page), method: :delete, data: { confirm: 'Na pewno usunąć?' } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

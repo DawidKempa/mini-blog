@@ -1,0 +1,11 @@
+<h2>Edytuj komentarz</h2>
+
+<%= form_with(model: [@post, @comment], local: true) do |f| %>
+  <div class="mb-3">
+    <%= f.label :content, "Treść komentarza", class: "form-label" %>
+    <%= f.text_area :content, class: "form-control", rows: 4 %>
+  </div>
+
+  <%= f.submit "Zapisz zmiany", class: "btn btn-primary" %>
+  <%= link_to "Anuluj", post_path(@post), class: "btn btn-secondary ms-2" %>
+<% end %>

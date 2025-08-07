@@ -1,0 +1,4 @@
+<%= link_to 'Generuj PDF', admin_export_pdf_path(template_path: "#{controller_path}/#{action_name}"), 
+      class: 'btn btn-primary mb-3', 
+      target: '_blank',
+      data: { turbo: false } %>

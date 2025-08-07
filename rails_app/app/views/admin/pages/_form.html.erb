@@ -1,0 +1,42 @@
+<%= form_with model: [:admin, @page], local: true do |f| %>
+  <div>
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </div>
+
+  <div>
+    <%= f.label :slug %>
+    <%= f.text_field :slug %>
+  </div>
+
+  <div>
+    <%= f.label :content %>
+    <%= f.rich_text_area :content %> 
+  </div>
+
+  <div>
+    <%= f.label :published %>
+    <%= f.check_box :published %>
+  </div>
+
+  <div>
+    <%= f.label :position %>
+    <%= f.number_field :position %>
+  </div>
+
+  <div class="mb-3">
+  <%= f.label :parent_id, "Strona nadrzędna" %>
+  <%= f.select :parent_id, 
+      options_from_collection_for_select(
+        Page.where.not(id: @page.id), 
+        :id, 
+        :title_with_path,
+        @page.parent_id
+      ),
+      { include_blank: "Brak (strona główna)" },
+      class: 'form-select'
+  %>
+</div>
+
+  <%= f.submit %>
+<% end %>

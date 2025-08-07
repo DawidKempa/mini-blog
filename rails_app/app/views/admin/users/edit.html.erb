@@ -1,0 +1,14 @@
+<% content_for :title, "Edycja użytkownika ##{@user.id}" %>
+
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title mb-0">Edycja użytkownika #<%= @user.id %></h5>
+  </div>
+  <div class="card-body">
+    <%= render 'form', user: @user %>
+  </div>
+  <div class="card-footer">
+    <%= link_to 'Pokaż', admin_user_path(@user), class: "btn btn-outline-primary" %>
+    <%= link_to 'Powrót', admin_users_path, class: "btn btn-outline-secondary" %>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<h1><%= @page.title %></h1>
+
+<div class="page-content">
+  <%= @page.content %>
+</div>
+
+<% if @child_pages.any? %>
+  <div class="child-pages mt-4">
+    <h3>Podstrony:</h3>
+    <ul class="list-group">
+      <% @child_pages.each do |child| %>
+        <li class="list-group-item">
+          <%= link_to child.title, admin_page_path(child.full_path) %>
+          <% if child.published? %>
+            <span class="badge bg-success ms-2">Opublikowana</span>
+          <% else %>
+            <span class="badge bg-warning ms-2">Szkic</span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+
+
+<div class="mt-4">
+  <%= link_to 'Edytuj', edit_admin_page_path(@page), class: 'btn btn-primary' %>
+  <%= link_to 'Powrót do listy', admin_pages_path, class: 'btn btn-secondary' %>
+  
+</div>
