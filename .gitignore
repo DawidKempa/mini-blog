@@ -1,0 +1,14 @@
+
+node_modules/
+rails_app/node_modules/
+
+.DS_Store
+Thumbs.db
+
+*.log
+
+.bundle/
+vendor/bundle/
+
+*.swp
+*~
