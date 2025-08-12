@@ -2,7 +2,7 @@
   <div class="full-width-container py-5">
     <div class="content-wrapper">
       <div class="text-center mb-5">
-        <h2 class="display-5 fw-bold text-primary">Nasze posty</h2>
+        <h2 class="display-5 fw-bold text-primary">Posty</h2>
       </div>
 
       <div v-if="loading" class="text-center py-5">

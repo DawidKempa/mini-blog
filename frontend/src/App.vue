@@ -1,5 +1,5 @@
 <script setup>
-import Comments from "./components/Comments.vue";
+import Comments from "./components/CommentsList.vue";
 import ContactForm from "./components/ContactForm.vue";
 import PostList from "./components/PostList.vue";
 import AdminLayout from "./components/AdminLayout.vue";
@@ -7,6 +7,6 @@ import AdminLayout from "./components/AdminLayout.vue";
 
 <template>
   <main>
-    <AdminLayout />
+    <router-view />
   </main>
 </template>

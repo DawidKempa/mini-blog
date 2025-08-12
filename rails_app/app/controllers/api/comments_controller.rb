@@ -1,64 +1,47 @@
 module Api
-  class CommentsController < Admin::BaseController
-    before_action :set_post, only: [:create]
-    before_action :set_comment, only: [:destroy, :update]
+  class CommentsController < ApplicationController
+    before_action :authenticate_user!
+    before_action :set_comment, only: [:show]
+    skip_before_action :authenticate_user!
 
-    def index
-      @comments = Comment.includes(:user, :post)
-                         .order(created_at: :desc)
-                         .page(params[:page]).per(12)
+    def index 
+      comments = Comment.includes(:user,:post)
+                      .order(created_at: :desc)
+      render json: comments.map { |comment| format_commnent(comment)}               
+    end
 
-      render json: @comments.as_json(include: {
-        user: { only: [:id, :name, :email] },
-        post: { only: [:id, :title] }
-      })
+    def show
+      render json: format_comment(@comment)
     end
 
     def create
-      @comment = @post.comments.build(comment_params)
-      @comment.user = current_user
+      comment = Comment.new(comment_params)
+      comment.user = current_user
 
-      if @comment.save
-        render json: @comment.as_json(include: {
-          user: { only: [:id, :name, :email] },
-          post: { only: [:id, :title] }
-        }), status: :created
+      if comment.save
+        render json: format_comment(comment), status: :created
       else
-        render json: { errors: @comment.errors.full_messages }, status: :unprocessable_entity
-      end
-    end
-
-    def update
-      if @comment.update(comment_params)
-        render json: @comment.as_json(include: {
-          user: { only: [:id, :name, :email] },
-          post: { only: [:id, :title] }
-        }), status: :ok
-      else
-        render json: { errors: @comment.errors.full_messages }, status: :unprocessable_entity
-      end
-    end
-
-    def destroy
-      if @comment.destroy
-        render json: { message: 'Komentarz został usunięty.' }, status: :ok
-      else
-        render json: { errors: 'Nie udało się usunąć komentarza.' }, status: :unprocessable_entity
+        render json: { errors: comment.errors.full_messages }, status: :unprocessable_entity
       end
     end
 
     private
 
-    def set_post
-      @post = Post.find(params[:post_id])
-    end
-
-    def set_comment
-      @comment = Comment.find(params[:id])
-    end
-
-    def comment_params
-      params.require(:comment).permit(:content)
+    def format_commnent(comment)
+      {
+        id: comment.id,
+        content: comment.content,
+        created_at: comment.created_at,
+        updated_at: comment.updated_at,
+        post:{
+          id: comment.post.id,
+          title: comment.post.title,
+        },
+        user: {
+          id: comment.user.id,
+          email: comment.user.email
+        }
+      }
     end
   end
 end
