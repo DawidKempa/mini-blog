@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     root to: "posts#index"
+
     resources :posts do
       resources :comments, only: [:create]
       member do
@@ -29,24 +30,21 @@ Rails.application.routes.draw do
     end
 
     resources :comments, only: [:index, :edit, :update, :destroy]
-
     resources :users
-
     resources :pages, except: [:show] do
       post 'attachments', on: :member
     end
 
+    # PDF
     get 'export_pdf', to: 'pdf#export', as: :export_pdf
-    get 'pdf/download', to: 'pdf#download', as: 'download_pdf'
+    get 'download_pdf', to: 'pdf#download', as: :download_pdf
 
+    # Strony w panelu
     get 'pages/*path', to: 'pages#show', as: :page_show,
         format: false, constraints: { path: /.*/ }
-
-
   end
 
   resources :pages, only: [:index]
-
   get 'pages/*path', to: 'pages#show', as: :page, format: false
 
   namespace :api, defaults: { format: :json } do

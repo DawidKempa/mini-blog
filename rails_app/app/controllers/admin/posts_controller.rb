@@ -1,7 +1,5 @@
 module Admin
   class PostsController < Admin::BaseController
-    before_action :authenticate_user!
-    before_action :authorize_admin!
     before_action :set_post, only: [:show, :edit, :update, :destroy]
 
     def index
@@ -52,12 +50,6 @@ module Admin
 
     def post_params
       params.require(:post).permit(:title, :body)
-    end
-
-    def authorize_admin!
-      unless current_user&.admin?
-        redirect_to root_path, alert: 'Brak uprawnień'
-      end
     end
   end
 end

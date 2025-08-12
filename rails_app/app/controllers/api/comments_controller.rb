@@ -1,24 +1,50 @@
 module Api
-  class CommentsController < ApplicationController
-    before_action :set_post
-    before_action :authenticate_user!
+  class CommentsController < Admin::BaseController
+    before_action :set_post, only: [:create]
+    before_action :set_comment, only: [:destroy, :update]
+
+    def index
+      @comments = Comment.includes(:user, :post)
+                         .order(created_at: :desc)
+                         .page(params[:page]).per(12)
+
+      render json: @comments.as_json(include: {
+        user: { only: [:id, :name, :email] },
+        post: { only: [:id, :title] }
+      })
+    end
 
     def create
       @comment = @post.comments.build(comment_params)
       @comment.user = current_user
 
       if @comment.save
-        redirect_to post_path(@post), notice: 'Komentarz został dodany.'
+        render json: @comment.as_json(include: {
+          user: { only: [:id, :name, :email] },
+          post: { only: [:id, :title] }
+        }), status: :created
       else
-        render 'posts/show'
+        render json: { errors: @comment.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
+    def update
+      if @comment.update(comment_params)
+        render json: @comment.as_json(include: {
+          user: { only: [:id, :name, :email] },
+          post: { only: [:id, :title] }
+        }), status: :ok
+      else
+        render json: { errors: @comment.errors.full_messages }, status: :unprocessable_entity
       end
     end
 
     def destroy
-      @comment = @post.comments.find(params[:id])
-      authorize_comment
-      @comment.destroy
-      redirect_to post_path(@post), notice: 'Komentarz został usunięty.'
+      if @comment.destroy
+        render json: { message: 'Komentarz został usunięty.' }, status: :ok
+      else
+        render json: { errors: 'Nie udało się usunąć komentarza.' }, status: :unprocessable_entity
+      end
     end
 
     private
@@ -27,14 +53,12 @@ module Api
       @post = Post.find(params[:post_id])
     end
 
-    def comment_params
-      params.require(:comment).permit(:content)
+    def set_comment
+      @comment = Comment.find(params[:id])
     end
 
-    def authorize_comment
-      unless current_user.admin? || @comment.user == current_user
-        redirect_to root_path, alert: 'Nie masz uprawnień do tej akcji.'
-      end
+    def comment_params
+      params.require(:comment).permit(:content)
     end
   end
 end

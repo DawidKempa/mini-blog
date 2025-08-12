@@ -82,4 +82,6 @@ config.action_mailer.smtp_settings = {
   authentication: :login
 }
 config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+
+config.hosts << /\Abackend(:\d+)?\z/
 end
